@@ -1,0 +1,63 @@
+<section class="section section__categories">
+    <div class="container">
+        <h1 class="page-title">Add new category</h1>
+
+        {{#if error}}
+            <p class="alert">{{error}}</p>
+        {{/if}}
+        <div class="row">
+            <div class="col s6">
+                <div class="with-header">
+                    <div class="wrapper__table wrapper__table-category">
+                        <table class="table highlight categories-table">
+                            <thead class="thead">
+                            <tr class="thead__row">
+                                <th>№</th>
+                                <th>Name of category <div class="sort arrows"><i class="fas fa-sort-up"></i><i class="fas
+                        fa-sort-down"></i></div></th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+                            </thead>
+                            <tbody class="tbody">
+                            {{#if categories.length}}
+                                {{#each categories}}
+                                    <tr class="tbody__row">
+                                        <td class="row__number">{{number}}</td>
+                                        <td><input class="edit__input-category" type="text" disabled
+                                                   value='{{name}}'></td>
+                                        <td class="td__btn">
+                                            <form class='edit__form-category'>
+                                                <input type="hidden" name="id" value='{{id}}'>
+                                                <button class="btn blue btn-edit__category"><i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn blue btn-submit__category" type='submit'><i
+                                                        class="far fa-save"></i></button>
+                                            </form>
+                                        <td class="td__btn">
+                                            <form action="/admin/categories/remove" method="POST">
+                                                <input type="hidden" name="id" value='{{id}}'>
+                                                <button class="btn red"><i class="fas fa-trash-alt"></i></button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                {{/each}}
+                            {{else}}
+                                <tr class="tbody__row error-category">
+                                    <td>
+                                        <p class="darken-1">Category not found</p>
+                                    </td>
+                                </tr>
+                            {{/if}}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="block__button">
+                        <buttton class="btn green tooltipped btn-add__category" data-position="bottom"
+                                 data-tooltip="Add category"><i class="fas fa-plus"></i></buttton>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

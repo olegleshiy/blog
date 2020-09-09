@@ -1,0 +1,12 @@
+<nav class="admin__nav">
+    <div class="nav-wrapper">
+        <div class='nav__logo'>
+            <a href="/" class="nav-logo">Blog</a>
+        </div>
+        <div class="right nav__menu">
+            {{#if isAuth}}
+                <div class="logout"><a href="/auth/logout"><i class="fas fa-sign-out-alt"></i></a></div>
+            {{/if}}
+        </div>
+    </div>
+</nav>

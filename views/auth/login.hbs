@@ -1,0 +1,30 @@
+<section class="section section__login">
+    <div class="auth">
+        <div class="container">
+            {{#if loginError}}
+                <p class="alert">{{loginError}}</p>
+            {{/if}}
+            <div class="row">
+                <div id="login" class="form__block col s6 offset-s3 auth-block">
+                    <h1 class="page-title">Log In</h1>
+                    <form action="/auth/login" method="POST" novalidate>
+                        <div class="input-field">
+                            <input id="email" name="email" type="email" class="validate" required>
+                            <label for="email">Email</label>
+                            <span class="helper-text" data-error="Enter email"></span>
+                        </div>
+                        <div class="input-field">
+                            <input id="password" name="password" type="password" class="validate" required>
+                            <label for="password">Password</label>
+                            <span class="helper-text" data-error="Enter password"></span>
+                        </div>
+                        <input type="hidden" name="_csrf" value='{{csrf}}'>
+                        <button class="btn btn-primary" type="submit">Log In</button>
+                        <p class="link--margin-bottom text-form"><a href="/auth/reset">Forgot password</a></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

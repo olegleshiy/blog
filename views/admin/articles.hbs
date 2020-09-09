@@ -1,0 +1,93 @@
+<section class="section section__articles">
+    <div class="container">
+        <h1 class="page-title">Manager articles</h1>
+        {{#if error}}
+            <p class="alert">{{error}}</p>
+        {{/if}}
+        <div class="row">
+            <div class="wrapper__table">
+                <table class="table highlight">
+                    <thead class="thead">
+                    <tr class="thead__row">
+                        <th>№</th>
+                        <th>Name
+                            <div class="sort arrows"><i class="fas fa-sort-up"></i><i class="fas
+                        fa-sort-down"></i></div>
+                        </th>
+                        <th>Category
+                            <div class="sort arrows"><i class="fas fa-sort-up"></i><i class="fas
+                        fa-sort-down"></i></div>
+                        </th>
+                        <th>Created
+                            <div class="sort arrows"><i class="fas fa-sort-up"></i><i class="fas
+                        fa-sort-down"></i></div>
+                        </th>
+                        <th>Unpunlish/Publish</th>
+                        <th>Preview</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                    </thead>
+                    <tbody class="tbody">
+                    {{#if articles.length}}
+                        {{#each articles}}
+                            <tr class="tbody__row">
+                                <td class="row__number">{{number}}</td>
+                                <td>{{title}}</td>
+                                <td>
+                                    {{#if categories.length}}
+                                        {{#each categories}}
+                                            {{#if @index}}, {{/if}}
+                                            {{name}}
+                                        {{/each}}
+                                    {{else}}
+                                        No category
+                                    {{/if}}
+                                </td>
+                                <td class="card-data--created">{{getTimeAdmin date}}</td>
+                                <td class="publish__btn td__btn">
+                                    {{#if status}}
+                                        <form name='publish' class='publish' method='put'>
+                                            <input type="hidden" name="id" value='{{id}}'>
+                                            <input type="hidden" name="status" value='false'>
+                                            <button class="btn green" type='submit'>Published</button>
+                                        </form>
+                                    {{else}}
+                                        <form name='publish' class='publish' method='put'>
+                                            <input type="hidden" name="id" value='{{id}}'>
+                                            <input type="hidden" name="status" value='true'>
+                                            <button class="btn red" type='submit'>Unpubliched</button>
+                                        </form>
+                                    {{/if}}
+                                </td>
+                                <td class="td__btn">
+                                    <a href='/articles/{{slug}}?preview=true' target="_parent" class="btn
+                                    purple">Preview</a>
+                                </td>
+                                <td class="td__btn"><a href='/admin/articles/{{slug}}/edit?allow=true' class="btn blue"><i
+                                        class="fas fa-edit"></i></a></td>
+                                <td class="td__btn">
+                                    <form action="/admin/articles/remove" method="POST">
+                                        <input type="hidden" name="id" value='{{id}}'>
+                                        <button class="btn red"><i class="fas fa-trash-alt"></i></button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {{/each}}
+                    {{else}}
+                        <tr class="tbody__row">
+                            <td>
+                                <p>Articles not found</p>
+                            </td>
+                        </tr>
+                    {{/if}}
+                    </tbody>
+                </table>
+            </div>
+            <div class="block__button">
+                <a href="/admin/articles/add" class="btn green tooltipped" data-position="bottom" data-tooltip="Add
+                    article"><i class="fas fa-plus"></i></a>
+            </div>
+        </div>
+    </div>
+</section>

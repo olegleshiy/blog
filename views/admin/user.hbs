@@ -1,0 +1,73 @@
+<section class="section section__user-add">
+    <div class="auth">
+        <div class="container">
+            {{#if isEdit}}
+                <h1 class="page-title">Edit user</h1>
+            {{else}}
+                <h1 class="page-title">Add user</h1>
+            {{/if}}
+            {{#if registerError}}
+                <p class="alert">{{registerError}}</p>
+            {{/if}}
+            <div class="row">
+                <div id="register" class="form__block col l6 offset-l3 m10 offset-m1">
+                    {{#if isEdit}}
+                    <form action="/admin/users/edit" method="POST" novalidate>
+                        <input type="hidden" name="id" value='{{user.id}}'>
+                    {{else}}
+                    <form action="/auth/register" method="POST" novalidate>
+                    {{/if}}
+                    <div class="input-field">
+                        <input id="name" name="name" type="text" class="validate" value='{{user.name}}' required>
+                        <label for="name">Name</label>
+                        <span class="helper-text" data-error="Enter your name"></span>
+                    </div>
+                    <div class="input-field">
+                        <input id="remail" name="email" type="email" class="validate" value='{{user.email}}'
+                               required>
+                        <label for="remail">Email</label>
+                        <span class="helper-text" data-error="Enter email"></span>
+                    </div>
+                    <div class="input-field">
+                        <select name="role" id="role" class="role" required>
+                            {{#if isEdit}}
+                                {{#ifeq user.role 'admin'}}
+                                    <option value="admin" selected>admin</option>
+                                    <option value="writer">writer</option>
+                                {{/ifeq}}
+                                {{#ifeq user.role 'writer'}}
+                                    <option value="admin">admin</option>
+                                    <option value="writer" selected>writer</option>
+                                {{/ifeq}}
+                                {{#ifeq user.role 'moderator'}}
+                                    <option value="moderator" selected>moderator</option>
+                                {{/ifeq}}
+                            {{else}}
+                                <option value="admin">admin</option>
+                                <option value="writer">writer</option>
+                            {{/if}}
+                        </select>
+                        <span class="helper-text" data-error="Enter password"></span>
+                    </div>
+                    <div class="input-field">
+                        <input id="rpassword" name="password" type="password" class="validate" required>
+                        <label for="rpassword">Password</label>
+                        <span class="helper-text" data-error="Enter password"></span>
+                    </div>
+                    <div class="input-field">
+                        <input id="confirm" name="confirm" type="password" class="validate" required>
+                        <label for="confirm">Confirm password</label>
+                        <span class="helper-text" data-error="Enter confirm password"></span>
+                    </div>
+                    {{#if isEdit}}
+                        <button class='btn btn-primary' type='submit'>Edit user</button>
+                    {{else}}
+                        <button class="btn btn-primary" type="submit">Add user</button>
+                    {{/if}}
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

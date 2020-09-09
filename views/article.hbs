@@ -1,0 +1,28 @@
+<section class="section__img-article">
+    <div class="section__img-bg" style="background-image: url('../{{article.img}}')">
+        <div class="container">
+            <h1 class="article-title">{{article.title}}</h1>
+        </div>
+        <div class="section__img-bg--gradient"></div>
+    </div>
+</section>
+<section class="section__content-article">
+    <div class="container">
+        <div class="article__row">
+            <div class="article__info">
+                <span class="article__info-created">{{getTime date}}</span>
+                {{#if article.categories.length}}
+                    {{#each article.categories}}
+                        {{#if @index}}<span class="article__info-category">, </span>{{/if}}
+                        <span class="article__info-category">{{name}}</span>
+                    {{/each}}
+                {{else}}
+                    <span class="article__info-category">No category</span>
+                {{/if}}
+            </div>
+            <div>
+                {{{article.body}}}
+            </div>
+        </div>
+    </div>
+</section>

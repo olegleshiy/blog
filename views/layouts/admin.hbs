@@ -1,0 +1,16 @@
+{{> head }}
+<body class="admin">
+<div class="wrapper">
+    {{> navbar-admin }}
+    <main>
+        <div class="block__content">
+            {{> navbar-admin-left}}
+            <div class='content__admin-right'>
+                {{{ body }}}
+            </div>
+        </div>
+    </main>
+    {{> footer-admin }}
+</div>
+</body>
+</html>

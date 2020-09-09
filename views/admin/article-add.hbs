@@ -1,0 +1,106 @@
+<section class="section section__add-article">
+    <div class="container">
+        {{#if isEdit}}
+            <h1 class="page-title">Edit article</h1>
+        {{else}}
+            <h1 class="page-title">Add new article</h1>
+        {{/if}}
+        {{#if error}}
+            <p class='alert'>{{error}}</p>
+        {{/if}}
+        <div class="row">
+            <div class="form__block">
+                <form name="articles" novalidate>
+                    <div class='input-group'>
+                        <div class='input-group-item'>
+                            <div class="input-field">
+                                <input id="title" name="title" type="text" class="validate" value='{{article.title}}'
+                                       required>
+                                <label for="title">Name of article</label>
+                                <span class="helper-text" data-error="Enter title"></span>
+                            </div>
+                            <div class="input-field">
+                                <input id="description" name="description" type="text" class="validate"
+                                       value='{{article.description}}'
+                                       required
+                                       min='1'>
+                                <label for="description">Description</label>
+                                <span class="helper-text" data-error="Enter description"></span>
+                            </div>
+                            <div class="input-field">
+                                {{#if categories.length}}
+                                    <select name="categories" id="categories" class="categories" required multiple>
+                                        {{#each categories}}
+                                            <option value='{{name}}'>{{name}}</option>
+                                        {{/each}}
+                                    </select>
+                                    <label for="categories">Category</label>
+                                    <div>
+                                        <a class='btn btn-primary' href="/admin/categories">Add category</a>
+                                    </div>
+                                {{else}}
+                                    <select name="categories" id="categories" class="categories" required>
+                                        <option value="Categories not found" disabled selected>Categories not found
+                                        </option>
+                                    </select>
+                                    <label for="categories">Category</label>
+                                    <div>
+                                        <a class='btn btn-primary' href="/admin/categories">Add category</a>
+                                    </div>
+                                {{/if}}
+                                <span class="helper-text" data-error="Enter category"></span>
+                            </div>
+                        </div>
+                        <div class='input-group-item'>
+                            <div class="input-field">
+                                <input id="meta-title" name="metatitle" type="text" class="validate"
+                                       value='{{article.meta.title}}' required>
+                                <label for="meta-title">Meta title</label>
+                                <span class="helper-text" data-error="Enter meta-title"></span>
+                            </div>
+                            <div class="input-field">
+                                <input id="meta-keywords" name="metakeywords" type="text" class="validate"
+                                       value='{{article.meta.keywords}}'
+                                       required>
+                                <label for="meta-keywords">Meta keywords</label>
+                                <span class="helper-text" data-error="Enter meta-keywords"></span>
+                            </div>
+                            <div class="input-field">
+                                <input id="meta-description" name="metadescription" type="text" class="validate"
+                                       value='{{article.meta.descriptions}}'
+                                       required>
+                                <label for="meta-description">Meta description</label>
+                                <span class="helper-text" data-error="Enter meta-description"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-field">
+                        <input id="img" name="banner" type="file" class="validate" style="opacity: 0; width: 0;
+                        height: 0;">
+                        <div class="btn download-button">
+                            <span><i class="fas fa-download"></i></span>
+                        </div>
+                        <div class='grid__crop'>
+                            <div class="wrapper__crop input-field">
+                                <img id="image" src="/{{article.img}}">
+                            </div>
+                            <div class="wrapper__crop input-field wrapper__crop-result">
+                                <img id="result" src="/{{article.img}}">
+                            </div>
+                        </div>
+                        <span class="helper-text" data-error="Enter url of image"></span>
+                    </div>
+                    <div class="input-field body-text">
+                        <textarea name="body" id="editor">{{article.body}}</textarea>
+                    </div>
+                    {{#if isEdit}}
+                        <input type="hidden" name="id" value='{{article.id}}'>
+                        <button class="btn btn-primary" type="submit">Change</button>
+                    {{else}}
+                        <button class="btn btn-primary save-btn" type='submit' disabled>Save</button>
+                    {{/if}}
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

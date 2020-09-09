@@ -1,0 +1,186 @@
+const { Router } = require('express');
+const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
+const { validationResult } = require('express-validator');
+const nodemailer = require('nodemailer');
+const sendgrid = require('nodemailer-sendgrid-transport');
+const requestIp = require('request-ip')
+const User = require('../models/user');
+const limiter = require('../utils/limiter');
+const auth = require('../middleware/auth');
+const keys = require('../keys');
+const regEmail = require('../emails/registration');
+const resetEmail = require('../emails/reset');
+const { registerValidators, loginValidators } = require('../utils/validators');
+
+const router = Router();
+
+const transporter = nodemailer.createTransport(sendgrid({
+    auth: { api_key: keys.SENDGRID_API_KEY }
+}));
+
+router.get('/login', loginValidators, async (req, res) => {
+    res.render('auth/login', {
+        layout: 'empty',
+        title: 'Authorization',
+        isLogin: true,
+        loginError: req.flash('loginError')
+    });
+});
+
+const timeout = 5 * 60 * 1000; // 5 min
+
+router.post('/login', [limiter(5, timeout)], async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        const candidate = await User.findOne({ email }).select('-__v -created -modified');
+        if (candidate) {
+            const areSame = await bcrypt.compare(password, candidate.password);
+            const data = {
+                _id: candidate._id,
+                name: candidate.name,
+                email: candidate.email,
+                role: candidate.role,
+                browserInfo: req.headers['user-agent'],
+                userIP: requestIp.getClientIp(req),
+            }
+
+            if (areSame) {
+                req.session.user = data;
+                req.session.isAuthenticated = true;
+                req.session.save(err => {
+                    if (err) {
+                        throw err;
+                    }
+                    res.redirect('/');
+                });
+            } else {
+                req.flash('loginError', 'Credentials are not valid');
+                res.redirect('/auth/login#login');
+            }
+        } else {
+            req.flash('loginError', 'Credentials are not valid');
+            res.redirect('/auth/login#login');
+        }
+    } catch (e) {
+        console.log(e);
+    }
+});
+
+router.get('/logout', async (req, res) => {
+    req.session.destroy(() => {
+        res.redirect('/auth/login#login');
+    });
+});
+
+router.post('/register', [auth, registerValidators], async (req, res) => {
+    try {
+        const { name, email, role, password } = req.body;
+
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            req.flash('registerError', errors.array()[0].msg);
+            return res.status(422).redirect('/admin/users/add');
+        }
+
+        const hashPassword = await bcrypt.hash(password, 12);
+        const user = new User({
+            email,
+            name,
+            role,
+            password: hashPassword,
+        });
+        await user.save();
+        res.redirect('/admin/users');
+        //await transporter.sendMail(regEmail(email));
+    } catch (e) {
+        console.log(e);
+    }
+});
+
+router.get('/reset', (req, res) => {
+    res.render('auth/reset', {
+        layout: 'admin',
+        title: 'Forgot password?',
+        error: req.flash('error')
+    });
+});
+
+router.post('/reset', (req, res) => {
+    try {
+        crypto.randomBytes(32, async (err, buffer) => {
+            if (err) {
+                req.flash('error', 'Something went wrong, try again later');
+                return res.redirect('/auth/reset');
+            }
+            const token = buffer.toString('hex');
+
+            const candidate = await User.findOne({ email: req.body.email });
+
+            if (candidate) {
+                candidate.resetToken = token;
+                candidate.resetTokenExp = Date.now() + 60 * 60 * 1000;
+                await candidate.save();
+                await transporter.sendMail(resetEmail(candidate.email, token));
+                res.redirect('/auth/login');
+            } else {
+                req.flash('error', 'This email not found');
+                res.redirect('/auth/reset');
+            }
+        });
+    } catch (e) {
+        console.log(e);
+    }
+});
+
+router.get('/password/:token', async (req, res) => {
+    try {
+        if (!req.params.token) {
+            return res.redirect('/auth/login');
+        }
+        const user = await User.findOne({
+            resetToken: req.params.token,
+            resetTokenExp: { $gt: Date.now() }
+        }).select('_id name email');
+        if (!user) {
+            return res.redirect('/auth/login');
+        } else {
+            res.render('auth/password', {
+                layout: 'admin',
+                title: 'Restore password?',
+                error: req.flash('error'),
+                userId: user._id.toString(),
+                token: req.params.token
+            });
+        }
+    } catch (e) {
+        console.log(e);
+    }
+
+});
+
+router.post('/password', async (req, res) => {
+    try {
+        const user = await User.findOne({
+            _id: req.body.userId,
+            resetToken: req.body.token,
+            resetTokenExp: { $gt: Date.now() }
+        });
+
+        if (user) {
+            user.password = await bcrypt.hash(req.body.password, 12);
+            user.resetToken = undefined;
+            user.resetTokenExp = undefined;
+            await user.save();
+            res.redirect('/auth/login');
+        } else {
+            req.flash('loginError', 'Credentials are not valid');
+            res.redirect('/auth/login');
+        }
+    } catch (e) {
+        console.log(e);
+    }
+});
+
+module.exports = router;

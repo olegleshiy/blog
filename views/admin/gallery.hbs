@@ -1,0 +1,27 @@
+<section class="section section__img-gallery">
+    <div class="container">
+        <h1 class="page-title">Galleries page</h1>
+        {{#if error}}
+            <p class="alert">{{error}}</p>
+        {{/if}}
+        <div class="row">
+            <div class="gallery__wrapper">
+                {{#if images.length}}
+                    {{#each images}}
+                        <div class="image-wrapper" style="background-image: url('../{{this}}')">
+                            <div class="button__remove">
+                                <form action="/admin/gallery/remove" method="POST">
+                                    <input type="hidden" name="id" value='{{this}}'>
+                                    <button class="btn red"><i class="fas fa-trash-alt"></i></button>
+                                </form>
+                            </div>
+                        </div>
+                    {{/each}}
+                {{else}}
+                    <p>Gallery is empty</p>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</section>
+

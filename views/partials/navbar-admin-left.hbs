@@ -1,0 +1,35 @@
+<div class="navbar__left">
+    <ul class="navbar__list">
+        <li></li>
+        {{#if isHome}}
+            <li class="active"><a href="/admin/articles"><i class="fas fa-home"></i> Home</a></li>
+        {{else}}
+            <li><a href="/admin/articles"><i class="fas fa-home"></i> Home</a></li>
+        {{/if}}
+        {{#if isArticles}}
+            <li class="active"><a href="/admin/articles"><i class="far fa-newspaper"></i> Articles</a></li>
+        {{else}}
+            <li><a href="/admin/articles"><i class="far fa-newspaper"></i> Articles</a></li>
+        {{/if}}
+        {{#if isCategories}}
+            <li class="active"><a href="/admin/categories"><i class="fas fa-th-list"></i> Categories</a></li>
+        {{else}}
+            <li><a href="/admin/categories"><i class="fas fa-th-list"></i> Categories</a></li>
+        {{/if}}
+        {{#ifeq 'moderator' @root.hasRole.role}}
+            {{#if isUsers}}
+                <li class="active"><a href="/admin/users"><i class="fas fa-user"></i> Users</a></li>
+            {{else}}
+                <li><a href="/admin/users"><i class="fas fa-user"></i> Users</a></li>
+            {{/if}}
+        {{else}}
+
+        {{/ifeq}}
+        {{#if isGallery}}
+            <li class="active"><a href="/admin/gallery"><i class="fas fa-images"></i> Gallery</a></li>
+        {{else}}
+            <li><a href="/admin/gallery"><i class="fas fa-images"></i> Gallery</a></li>
+        {{/if}}
+        <li></li>
+    </ul>
+</div>

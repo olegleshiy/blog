@@ -1,0 +1,20 @@
+@import "variables";
+
+/*Gallery*/
+.image-wrapper {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  height: 200px;
+}
+
+.button__remove {
+  position: absolute;
+  right: 15px;
+  top: 15px;
+}
+.gallery__wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-gap: 20px;
+}

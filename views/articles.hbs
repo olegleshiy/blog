@@ -1,0 +1,61 @@
+<section class="section-one section__blog">
+    <div class="container">
+        <h1 class="page-title">Articles page</h1>
+        <div class="blog__content-items content__items">
+            {{#if articles.length}}
+                <div class="content__items-nav content__items-item">
+                    <div class="content__items-container">
+                        <ul class="content__items-category">
+                            <li class="nav__item"><a href='/articles'
+                                                     class="nav__item-link">All articles</a></li>
+                            {{#each categories}}
+                                <li class="nav__item"><a href='/articles/category/{{slug}}'
+                                                         class="nav__item-link">{{name}}</a></li>
+                            {{/each}}
+                        </ul>
+                    </div>
+                </div>
+                {{#each (limit articles 3)}}
+                    {{#if status}}
+                        <article class="content__items-card content__items-item">
+                            <div class="content__items-container">
+                                <p class="card-data--created article-data">{{getTime date}}</p>
+                                <h5 class="card-title">{{title}}</h5>
+                                <div class="card__img-block"
+                                     style="background-image: url('/{{img}}')"></div>
+                                <p class="card-description">{{getDescription description}}</p>
+                                <div class="card__clock">
+                                    <a class="card-read-more" href='/articles/{{slug}}'>Read more <img
+                                            class="read-more-arrow" src="/img/more-right-arrow.svg" alt="arrow"></a>
+                                </div>
+                            </div>
+                        </article>
+                    {{/if}}
+                {{/each}}
+            {{else}}
+                <p>Articles not found</p>
+            {{/if}}
+        </div>
+        {{#if articles.length}}
+            {{#pagination currentPage pageCount size}}
+                <div class="pagination">
+                    {{#if ../hasPrevPage}}
+                        <a href='?page={{../prevPage}}' class="btn-pagination prev-btn">&lt;</a>
+                    {{/if}}
+                    {{#each pages}}
+                        {{#if isCurrent}}
+                            <a href='?page={{currentPage}}' class="btn-pagination current">{{page}}</a>
+                        {{/if}}
+                        {{#unless isCurrent}}
+                            <a href='?page={{page}}' class="btn-pagination">{{page}}</a>
+                        {{/unless}}
+                    {{/each}}
+                    {{#if ../hasNextPage}}
+                        <a href='?page={{../nextPage}}' class="btn-pagination next-btn">&gt;</a>
+                    {{/if}}
+                </div>
+            {{/pagination}}
+        {{/if}}
+    </div>
+</section>
+

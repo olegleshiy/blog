@@ -1,0 +1,20 @@
+<nav>
+    <div class="nav-wrapper">
+        <a href="/" class="nav-logo">Blog</a>
+        <ul class="right">
+            {{#if isHome}}
+                <li class="active"><a href="/">Home</a></li>
+            {{else}}
+                <li><a href="/">Home</a></li>
+            {{/if}}
+            {{#if isArticles}}
+                <li class="active"><a href="/articles">Articles</a></li>
+            {{else}}
+                <li><a href="/articles">Articles</a></li>
+            {{/if}}
+            {{#if isPreview}}
+                <li class="active"><a href="/admin/articles">Admin</a></li>
+            {{/if}}
+        </ul>
+    </div>
+</nav>

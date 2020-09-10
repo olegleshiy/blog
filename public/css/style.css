@@ -903,10 +903,6 @@ main {
 .admin .navbar__list li a i {
   padding-right: 5px; }
 
-.admin .footer {
-  background-image: none;
-  background-color: #122223; }
-
 nav .nav-wrapper {
   padding: 15px 2rem;
   color: #ffffff; }
@@ -993,10 +989,11 @@ nav .nav-wrapper {
   float: none; }
 
 .admin .footer {
+  background-image: none;
   text-align: center;
   font-family: sans-serif, Arial;
   font-size: 16px;
-  padding: 34px;
+  padding: 16px;
   background-color: #214349;
   color: #ffffff; }
 

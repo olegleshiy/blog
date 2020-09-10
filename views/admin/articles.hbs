@@ -46,19 +46,16 @@
                                 </td>
                                 <td class="card-data--created">{{getTimeAdmin date}}</td>
                                 <td class="publish__btn td__btn">
-                                    {{#if status}}
-                                        <form name='publish' class='publish' method='put'>
-                                            <input type="hidden" name="id" value='{{id}}'>
-                                            <input type="hidden" name="status" value='false'>
+                                    <form name='publish' class='publish'>
+                                        <input type="hidden" name="id" value='{{id}}'>
+                                        <input type="hidden" name="status" value='false'>
+                                        {{#if status}}
                                             <button class="btn green" type='submit'>Published</button>
-                                        </form>
-                                    {{else}}
-                                        <form name='publish' class='publish' method='put'>
-                                            <input type="hidden" name="id" value='{{id}}'>
-                                            <input type="hidden" name="status" value='true'>
-                                            <button class="btn red" type='submit'>Unpubliched</button>
-                                        </form>
-                                    {{/if}}
+                                        {{else}}
+                                            <button class="btn red" type='submit'>Unpublished</button>
+                                        {{/if}}
+
+                                    </form>
                                 </td>
                                 <td class="td__btn">
                                     <a href='/articles/{{slug}}?preview=true' target="_parent" class="btn

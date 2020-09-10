@@ -91,7 +91,7 @@ const rows = document.querySelectorAll('tbody tr');
 rows && addedRowsNumber(rows);
 
 /** Create post **/
-(window.location.href === '/admin/articles/add' || window.location.search === '?allow=true') && ClassicEditor
+(window.location.pathname === '/admin/articles/add' || window.location.search === '?allow=true') && ClassicEditor
     .create(document.querySelector('#editor'), {
         toolbar: {
             items: [
@@ -315,30 +315,42 @@ try {
 }
 
 /** Publish post **/
-const btnPublish = document.querySelector('.publish');
-btnPublish && btnPublish.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const formData = new FormData(btnPublish);
-    console.log("formData", formData);
+const btnPublish = document.querySelectorAll('.publish');
+btnPublish.forEach(form => {
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(form);
+        console.log("formData", formData);
 
-    const data = {
-        id: formData.get('id'),
-        status: formData.get('status')
-    };
-    console.log('DATA', data);
-    try {
-        const result = await fetch('/articles/publish', {
-            method: 'PUT',
-            body: JSON.stringify(data),
-            headers: {
-                'Content-Type': 'application/json'
+        const data = {
+            id: formData.get('id'),
+            status: formData.get('status')
+        };
+        console.log('DATA', data);
+        try {
+            const result = await fetch('/admin/articles/publish', {
+                method: 'PUT',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            if(result.status === 200) {
+                console.log("result.status", result);
+                const response = await result.json();
+                const btn = form.querySelector('button');
+                console.log('btn', btn);
+                btn.classList.remove(`${response.status ? 'red' : 'green'}`);
+                btn.classList.add(`${response.status ? 'green' : 'red'}`);
+                btn.innerHTML = `${response.status ? 'Published' : 'Unpublished'}`;
+                console.log("response", response);
             }
-        });
-        const response = await result.json();
-    } catch (e) {
-        console.error('Error:', e);
-    }
-});
+
+        } catch (e) {
+            console.error('Error:', e);
+        }
+    });
+})
 
 /** Init elements **/
 M.Tooltip.init(document.querySelectorAll('.tooltipped'));

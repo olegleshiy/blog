@@ -320,13 +320,12 @@ btnPublish.forEach(form => {
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         const formData = new FormData(form);
-        console.log("formData", formData);
 
         const data = {
             id: formData.get('id'),
             status: formData.get('status')
         };
-        console.log('DATA', data);
+
         try {
             const result = await fetch('/admin/articles/publish', {
                 method: 'PUT',
@@ -336,14 +335,14 @@ btnPublish.forEach(form => {
                 }
             });
             if(result.status === 200) {
-                console.log("result.status", result);
                 const response = await result.json();
                 const btn = form.querySelector('button');
-                console.log('btn', btn);
+                const status = form.querySelector('#status');
+
+                status.value = !response.status;
                 btn.classList.remove(`${response.status ? 'red' : 'green'}`);
                 btn.classList.add(`${response.status ? 'green' : 'red'}`);
                 btn.innerHTML = `${response.status ? 'Published' : 'Unpublished'}`;
-                console.log("response", response);
             }
 
         } catch (e) {

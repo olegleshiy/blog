@@ -48,10 +48,12 @@
                                 <td class="publish__btn td__btn">
                                     <form name='publish' class='publish'>
                                         <input type="hidden" name="id" value='{{id}}'>
-                                        <input type="hidden" name="status" value='false'>
+
                                         {{#if status}}
+                                            <input type="hidden" id="status" name="status" value='false'>
                                             <button class="btn green" type='submit'>Published</button>
                                         {{else}}
+                                            <input type="hidden" id="status" name="status" value='true'>
                                             <button class="btn red" type='submit'>Unpublished</button>
                                         {{/if}}
 

@@ -194,25 +194,11 @@ router.put('/articles/edit', [auth], async (req, res) => {
 router.put('/articles/publish', [auth], async (req, res) => {
     try {
         let { id, status } = req.body;
-        console.log("req", req.body);
         const article = await Article.updateOne({_id: id}, { status: status });
-        //const articles = await Article.find({}).populate('categories');
 
-        //articles.forEach(post => post.status ? post.status : post.status = '' );
         if (article) {
-            //article.status = !article.status;
-
-            console.log("SAVE", article);
             res.status(200).json({ status: JSON.parse(status) });
         }
-
-        // res.render('admin/articles', {
-        //     layout: 'admin',
-        //     title: 'Add new article',
-        //     isArticles: true,
-        //     articles
-        // });
-        //res.status(200).json({ status: article.status });
     } catch (e) {
         console.log(e);
     }
